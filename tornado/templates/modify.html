@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Modify</title>
+	<link rel="stylesheet" class="ui" href="/static/css/semantic.min.css"/>
+  <link rel="stylesheet" class="ui" href="/static/css/body.css"/>
+  <link rel="stylesheet" class="ui" href="/static/css/chat.css"/>
+  <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
+
+  <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+  <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+
+		function vaildateForm() {
+			var password = document.forms["ModifyForm"]["password"].value;
+			var rep_password = document.forms["ModifyForm"]["rep_password"].value;
+			var email = document.forms["ModifyForm"]["email"].value;
+			var phone = document.forms["ModifyForm"]["phone"].value;
+			var reg_filter=/^s*[.A-Za-z0-9_-]{3,20}s*$/;
+
+			if (password == null || password == ""){
+				alert("Password must be filled!");
+				return false;
+			}
+			if (!reg_filter.test(password)){
+				alert("Invalid password");
+				return false;	
+			}
+			if (rep_password == null || rep_password == ""){
+				alert("Please input password again!");
+				return false;
+			}
+
+			if (password != rep_password){
+				alert("Wrong password!");
+				return false;
+			}
+			return true;
+		}
+		function reset() {
+			$('#password').val('');
+			$('#rep_password').val('');
+			$('#email').val('');
+			$('#phone').val('');
+		}
+	</script>
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">QChat</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/chatroom">ChatRooms </a></li>
+            <li><a href="/picture">Pictures </a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            {%if not cookieUser%}
+            <li><a href="#">Login </a></li>
+            {%else%}
+            <li class="dropdown">
+              <a id="dLabel" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{cookieUser}} <span class="caret"></span></a>
+              <ul class="dropdown-menu" aria-labelledby="dLabel">
+                <li><a href="#">Messages</a></li>
+                <li><a href="/modify">Settings</a></li>
+                <li><a href="/create">CreateNewRoom</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </li>
+            {%end%}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container -->
+  </nav>
+  
+  <div class="container">
+      <div id="login" class="ui two column relaxed grid">
+          <div class="column">
+              <div class="ui fluid form segment">
+                  <h3 class="ui header">Modify personal info</h3>
+									<form name="ModifyForm"  action="/modify" onsubmit="return vaildateForm();" onreset="reset()" method="post">
+										<div class="field">
+			                 <label>username: {{cookieUser}}</label>
+			              </div>
+										<div class="field">
+			              		<label>New password</label>
+			              		<input name="password" id="password" type="password">
+			          		</div>
+										<div class="field">
+			              		<label>Password again</label>
+			              		<input name="rep_password" id="rep_password" type="password">
+			          		</div>
+										<div class="field">
+			              		<label>email</label>
+			              		<input name="email" id="email" type="text">
+			          		</div>
+										<div class="field">
+			              		<label>phone number</label>
+			              		<input name="phone" id="phone" type="text">
+			          		</div>
+										<input type="submit" value="Submit" id="submit" class="ui blue login_submit button">
+										&nbsp &nbsp &nbsp
+										<input type="reset"  value="Reset" id="reset" class="ui blue login_submit button">
+			            </form>
+							</div>
+  				</div>
+			</div>
+	</div>
+
+</body>
+<html>

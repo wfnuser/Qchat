@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Login</title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/login.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
+    
+    <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    
+	<script type="text/javascript">
+		function vaildateForm() {
+			var username = document.forms["loginForm"]["username"].value;
+			var password = document.forms["loginForm"]["password"].value;
+			if (username == null || username == ""){
+				alert("username must be filled");
+				return false;
+			}
+			var reg_filter=/^s*[.A-Za-z0-9_-]{4,20}s*$/;
+			if (!reg_filter.test(username)){
+				alert("The username length range from 4 characters to 20 characters!");
+				return false;
+			}
+			if (password == null || password == ""){
+				alert("password must be filled");
+				return false;
+			}
+			if (!reg_filter.test(password)){
+				alert("The password length range from 4 characters to 20 characters!");
+				return false;	
+			}
+			return true;
+		}
+	</script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">QChat</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/chatroom">ChatRooms </a></li>
+            <li><a href="/picture">Pictures </a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            {%if not cookieUser%}
+            <li><a href="#">Login </a></li>
+            {%else%}
+            <li class="dropdown">
+              <a id="dLabel" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> {{cookieUser}} <span class="caret"></span></a>
+              <ul class="dropdown-menu" aria-labelledby="dLabel">
+                <li><a href="#">Messages</a></li>
+                <li><a href="/modify">Settings</a></li>
+                <li><a href="/create">CreateNewRoom</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </li>
+            {%end%}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container -->
+    </nav>
+
+    <div class="container">
+	{%if not cookieUser%}
+    {%if Error%}
+    <div class="alert alert-danger" role="alert">User doesn't exist or wrong password!</div>
+    <a href='/login'> 返回 </a>
+    {%else%}
+
+    <div class="row">
+        <div class="loginpanel">
+            <h2 style="margin-bottom:15px;">
+                <span class="fa fa-quote-left "></span> Login <span class="fa fa-quote-right "></span>
+            </h2>
+            <form name="loginForm"  action="/login" onsubmit="return vaildateForm();" method="post">
+                <input name="username" id="username" type="text" placeholder="username" >
+                <input name="password" id="password" type="password" placeholder="password">
+                <input type="submit" value="Login" class="btn btn-warning loginbutton">
+                </input>
+                <a href='/register' class="btn btn-warning loginbutton"> <span style="line-height:37px;font-size:14px;">Register</span> </a>
+            </form>
+        </div>
+    </div>
+
+
+    {%end%}
+	{%else%}
+		<!-- Go to Chatrooms Page-->
+		<meta http-equiv="refresh" content="0; /chatroom">
+	{%end%}
+    </div>
+</body>
+</html>

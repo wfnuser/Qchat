@@ -1,0 +1,157 @@
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<title>ChatRoom</title>
+	<link rel="stylesheet" class="ui" href="/static/css/semantic.min.css"/>
+  <link rel="stylesheet" class="ui" href="/static/css/body.css"/>
+  <link rel="stylesheet" class="ui" href="/static/css/chat.css"/>
+  <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+  <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/static/js/jquery.qqFace.js"></script>
+
+  <style type="text/css">
+      span.emotion{width:42px; height:30px; line-height:30px; background:url(/static/img/icon.gif) no-repeat 2px 2px; padding-left:20px; cursor:pointer}
+      span.emotion:hover{background-position:2px -28px}
+  </style>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">QChat</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/chatroom">ChatRooms </a></li>
+            <li><a href="/picture">Pictures </a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            {%if not cookieUser%}
+            <li><a href="#">Login </a></li>
+            {%else%}
+            <li class="dropdown">
+              <a id="dLabel" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> {{cookieUser}} <span class="caret"></span></a>
+              <ul class="dropdown-menu" aria-labelledby="dLabel">
+                <li><a href="#">Messages</a></li>
+                <li><a href="/modify">Settings</a></li>
+                <li><a href="/create">CreateNewRoom</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </li>
+            {%end%}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container -->
+    </nav>
+
+    <!-- Message -->
+    <div id="main" class="main container">
+        <div  id="message_section" class="ui column grid" >
+            <div class="column">
+                <div class="circular ui button"><a href="/chatroom">Return ChatRoom List</a></div>
+                <div class="ui piled blue segment">
+                    <h2 class="ui header">
+                        #<i id="message_head">{{roominfo[1]}}</i>#
+                        <span style="visibility:hidden" id="roomid">{{roominfo[0]}}</span>
+                    </h2>
+                    <div id="message_list" class="ui comments">
+                        <!-- comments section -->
+                        {%for each in msginfo%}
+                            {{each[0]}}:{{each[1]}}<br>
+                        {%end%}
+                    </div>
+                    <div class="ui reply form">
+                        <div class="field">
+                            <input type="text" id="msg"/>
+                        </div>
+                        <div id="submit" data="" class="ui fluid blue labeled submit icon button">
+                            <i class="icon edit"></i> Send a message!
+                        </div>
+                        <div><span class="emotion">表情</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+<script>
+    $(function () {
+
+      $("#message_list").html(replace_em($("#message_list").html()));
+      function doSubmit() {
+        var msg = $("#msg").val();
+        $.post(
+          '/room/'+$("#roomid").html(),
+          {msg:msg},
+          function (data) {
+            $("#msg").val('');
+          }
+        );
+        return true;
+      }
+
+      $("#submit").click(doSubmit);
+      $("#msg").keydown(function(e) {
+        if(e.keyCode == 13)
+          doSubmit();
+      });
+
+      $('.emotion').qqFace({
+          id: 'facebox', //表情ID
+          assign: 'msg', //赋予到具体位置
+          path: '/static/face/' //表情路径
+      });
+
+      var updater = {
+        poll: function(){
+          $.ajax({url: "/longpolling",
+            type: "POST",
+            dataType: "json",
+            success: updater.onSuccess,
+            error: updater.onError});
+        },
+        onSuccess: function(data, dataStatus){
+          try{
+            if (data.msg != "") {
+              $("#message_list").append(data.name+": " + replace_em(data.msg) + "<br />");
+            }
+          }
+          catch(e){
+            updater.onError(e);
+            return;
+          }
+          updater.poll();
+        },
+        onError: function(e){
+          if (e.message)
+            console.log("Poll Error" + e.message);
+          else
+            console.log(e);
+        }
+      };
+
+      updater.poll();
+    });
+    function replace_em(str) { //表情符号替换成图片
+        // str = str.replace(/\</g, '&lt;');
+        // str = str.replace(/\>/g, '&gt;');
+        // str = str.replace(/\n/g, '<br/>');
+        str = str.replace(/\[em_([0-9]*)\]/g, '<img src="/static/face/$1.gif" border="0" />');
+        return str;
+    }
+  </script>
+
+</html>

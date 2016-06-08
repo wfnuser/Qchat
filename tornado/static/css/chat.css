@@ -1,0 +1,33 @@
+body {
+    font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    background: #FCFCFC url(../img/bg.jpg) repeat;
+    margin: 0px;
+    padding: 0px;
+    color: #555555;
+    min-width: 320px;
+}
+.container {
+    width: 915px;
+    margin: 0px auto;
+}
+div.right, div.right a.author, div.right div.metadata, div.right>div.text {
+    float: right;
+}
+div.content {
+    width: 250px;
+}
+#main {
+    min-height: 700px;
+}
+.comment {
+    min-height: 85px;
+}
+#message_list {
+    height: 400px;
+    overflow-y: auto;
+}
+.label>p {
+    text-transform: none;
+}
+
+

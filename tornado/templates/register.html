@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Register</title>
+	<link rel="stylesheet" class="ui" href="/static/css/semantic.min.css"/>
+  <link rel="stylesheet" class="ui" href="/static/css/body.css"/>
+  <link rel="stylesheet" class="ui" href="/static/css/chat.css"/>
+	<link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
+
+  <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+  <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript">
+		function vaildateForm() {
+			var username = document.forms["registerForm"]["username"].value;
+			var password = document.forms["registerForm"]["password"].value;
+			var rep_password = document.forms["registerForm"]["rep_password"].value;
+			//var email = document.forms["registerForm"]["email"].value;
+			//var phone = document.forms["registerForm"]["phone"].value;
+			if (username == null || username == ""){
+				alert("Username must be filled!");
+				return false;
+			}
+			var reg_filter=/^s*[.A-Za-z0-9_-]{3,15}s*$/;
+			if (!reg_filter.test(username)){
+				alert("Invalid username!");
+				return false;
+			}
+			if (password == null || password == ""){
+				alert("Password must be filled!");
+				return false;
+			}
+			if (!reg_filter.test(password)){
+				alert("Invalid password!");
+				return false;	
+			}
+			if (rep_password == null || rep_password == ""){
+				alert("Please fill password again!");
+				return false;
+			}
+
+			if (password != rep_password){
+				alert("Wrong Password!");
+				return false;
+			}
+			return true;
+		}
+
+		function reset() {
+			$('#username').val('');
+			$('#password').val('');
+			$('#rep_password').val('');
+		}
+
+	</script>
+</head>
+
+<body >
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">QChat</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/chatroom">ChatRooms </a></li>
+            <li><a href="/picture">Pictures </a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            {%if not cookieUser%}
+            <li><a href="/login">Login </a></li>
+            {%else%}
+            <li class="dropdown">
+              <a id="dLabel" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"> {{cookieUser}} <span class="caret"></span></a>
+              <ul class="dropdown-menu" aria-labelledby="dLabel">
+                <li><a href="#">Messages</a></li>
+                <li><a href="/modify">Settings</a></li>
+                <li><a href="/create">CreateNewRoom</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </li>
+            {%end%}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container -->
+    </nav>
+{%if not Error%}
+    <div class="container">
+        <div id="login" class="ui two column relaxed grid">
+            <div class="column">
+                <div class="ui fluid form segment">
+                    <h3 class="ui header">Register</h3>
+						<form name="registerForm"  action="" onsubmit="return vaildateForm();
+						"onreset="reset()" method="post">
+							<div class="field">
+                        		<label>Username</label>
+                        		<input name="username" id="username" placeholder="Username" type="text">
+                    		</div>
+							<div class="field">
+                        		<label>Password</label>
+                        		<input name="password" id="password" type="password">
+                    		</div>
+							<div class="field">
+                        		<label>Password Again</label>
+                        		<input name="rep_password" id="rep_password" type="password">
+                    		</div>
+							<div class="inline field">
+		                        <div class="ui checkbox">
+		                            <input type="checkbox" id="terms">
+		                            <label for="terms">I agree QChat clause.</label>
+		                        </div>
+                    		</div>
+							<input type="submit" value="Submit" id="submit" class="ui blue login_submit button">
+							&nbsp &nbsp &nbsp
+							<input type="reset"  value="Reset" id="reset" class="ui blue login_submit button">
+                  		</form>
+				</div>
+    		</div>
+		</div>
+	</div>
+
+{%else%}
+    <div class="container">
+        <div id="login" class="ui two column relaxed grid">
+            <div class="column">
+                <div class="ui fluid form segment">
+                    <h3 class="ui header" color="red" style="color: red;">Failed to register!</h3>
+                        <h3><b>Duplicate username!</b></h3>
+                        <a href='/register'> Register again </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{%end%}
+</body>
+<html>

@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>ChatRoom</title>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
+
+    <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">QChat</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/chatroom">ChatRooms </a></li>
+            <li><a href="/picture">Pictures </a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            {%if not cookieUser%}
+            <li><a href="#">Login </a></li>
+            {%else%}
+            <li class="dropdown">
+              <a id="dLabel" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{cookieUser}} <span class="caret"></span></a>
+              <ul class="dropdown-menu" aria-labelledby="dLabel">
+                <li><a href="#">Messages</a></li>
+                <li><a href="/modify">Settings</a></li>
+                <li><a href="/create">CreateNewRoom</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </li>
+            {%end%}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container -->
+    </nav>
+
+    <!--room list-->
+    <div class="container">
+    	<div class="row">
+    		{% for room in roomlist %}
+			    <div class="col-md-3 col-sm-6">
+				    	<!-- room[0]:roomid,[1]:roomname,[2]:created_time,[3]:userid,[4]:owner_name-->
+				    	<div class="thumbnail">
+						    <a href="/room/{{room[0]}}" style="color: #777;text-decoration: none;">
+						    	<div class="container">
+			                <h3>{{room[1]}}</h3>
+			                <p>
+			                Founder :{{room[4]}} 
+			                </p>
+			                <p>
+			                Create time :{{room[2]}}
+			                </p>
+					        </div>
+						    </button>
+					    </div>
+				  </div>
+			  {% end %}
+	    </div>
+  	</div>
+</body>

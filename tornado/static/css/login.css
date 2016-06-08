@@ -1,0 +1,38 @@
+.loginpanel {
+    text-align: center;
+    border-radius: 0.5rem;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 10px auto;
+    padding: 20px;
+    padding-top:0px;
+}
+
+input {
+    width: 100%;
+    margin-bottom: 17px;
+    padding: 15px;
+    background-color: #ECF4F4;
+    border-radius: 2px;
+    border: none;
+}
+
+.buttonwrapper {
+    position: relative;
+    overflow: hidden;
+    height: 50px;
+}
+
+.loginbutton {
+    background-color: #f08000;
+    width: 100%;
+    margin-bottom:17px;
+    height:50px;
+}
+
+.btn span {
+    font-size: 27px;
+    color: white;
+}

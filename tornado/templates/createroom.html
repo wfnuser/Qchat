@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>ChatRoom</title>
+	<link rel="stylesheet" class="ui" href="/static/css/semantic.min.css"/>
+    <link rel="stylesheet" class="ui" href="/static/css/body.css"/>
+    <link rel="stylesheet" class="ui" href="/static/css/chat.css"/>
+
+    <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet">
+
+    <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        function vaildateForm() {
+            var roomname = document.forms["createRoomForm"]["roomname"].value;
+            if (roomname == null || roomname == ""){
+                alert("roomname must be filled");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">QChat</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/chatroom">ChatRooms </a></li>
+            <li><a href="/picture">Pictures </a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            {%if not cookieUser%}
+            <li><a href="#">Login </a></li>
+            {%else%}
+            <li class="dropdown">
+              <a id="dLabel" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{cookieUser}} <span class="caret"></span></a>
+              <ul class="dropdown-menu" aria-labelledby="dLabel">
+                <li><a href="#">Messages</a></li>
+                <li><a href="/modify">Settings</a></li>
+                <li><a href="/create">CreateNewRoom</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </li>
+            {%end%}
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container -->
+    </nav>
+    {% if not Error%}
+    <div class="container">
+        <div id="login" class="ui two column relaxed grid">
+            <div class="column">
+                <div class="ui fluid form segment">
+                    <h3 class="ui header">ADD Room</h3>
+                       <form name="createRoomForm"  action="/create" onsubmit="return vaildateForm();" method="post">
+                            <div class="field">
+                                <label>Create New Room</label>
+                                <input name="roomname" id="roomname" placeholder="roomname" type="text">
+                            </div>
+                            <input type="submit" value="ADD" id="submit" class="ui blue login_submit button">
+                            &nbsp&nbsp&nbsp
+                            <a href='/chatroom'> Return </a>
+                        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="container">
+        <div id="login" class="ui two column relaxed grid">
+            <div class="column">
+                <div class="ui fluid form segment">
+                    <h3 class="ui header" color="red" style="color: red;">Failed to create new room!</h3>
+                        <h4><b>Duplicate room name!</b></h4> <br>
+                        <a href='/create'> Recreate </a>
+                        &nbsp&nbsp&nbsp&nbsp
+                        <a href="/chatroom"> Return </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% end %}
+</body>>
